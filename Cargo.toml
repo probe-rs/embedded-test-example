@@ -2,23 +2,20 @@
 name = "embedded-test-example"
 version = "0.1.0"
 edition = "2021"
-repository = "https://github.com/t-moe/embedded-test-example"
+repository = "https://github.com/probe-rs/embedded-test-example"
 license = "MIT OR Apache-2.0"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-esp-backtrace = { version = "0.9.0", features = ["esp32c6", "print-uart", "panic-handler", "exception-handler"] }
-esp-println = { version="0.7.1", features = ["log", "uart", "esp32c6", "colors"], default-features = false }
+esp-println = { version="0.7.1", features = ["log", "rtt", "esp32c6", "colors"], default-features = false }
 esp32c6-hal = { version="0.6.0" }
 log = "0.4.20"
+
+[dev-dependencies]
+embedded-test = {git="https://github.com/probe-rs/embedded-test", features = ["log"]}
+panic-probe = {git = "https://github.com/t-moe/defmt", features = ["print-rtt"]}  # the upstream create does not support riscv yet
 
 [[test]]
 name = "example_test"
 harness = false
-
-[target.'cfg(target_arch = "riscv32")'.dev-dependencies]
-embedded-test = {git="https://github.com/t-moe/embedded-test", features = ["log"]}
-panic-probe = {git = "https://github.com/t-moe/defmt"}  # the upstream create does not support riscv yet
-
-

@@ -1,7 +1,5 @@
 #![no_std]
 #![no_main]
-#![feature(type_alias_impl_trait)]
-#![feature(async_closure)]
 
 use esp32c6_hal as _; // exception handler
 use panic_probe as _; // semihosting::process::abort on test failure
@@ -12,6 +10,7 @@ mod unit_tests {
 
     #[test]
     fn it_works() {
+        log::info!("Hello, world!"); // Prints via esp-println to rtt
         assert!(true)
     }
 

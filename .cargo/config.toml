@@ -5,8 +5,9 @@ ESP_LOGLEVEL="debug"
 target = "riscv32imac-unknown-none-elf"
 
 [target.riscv32imac-unknown-none-elf]
-runner = "embedded-test"
 
+# Syntax is: probe-rs test <flash settings> -- <elf> <libtest args>
+runner = "probe-rs test --chip esp32c6 -- "
 
 rustflags = [
     "-C", "link-arg=-Tlinkall.x",
