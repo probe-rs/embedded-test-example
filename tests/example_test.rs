@@ -9,28 +9,37 @@ use panic_probe as _; // semihosting::process::abort on test failure
 mod unit_tests {
 
     #[test]
-    fn it_works() {
-        log::info!("Hello, world!"); // Prints via esp-println to rtt
+    #[cfg(feature="log")]
+    fn log() {
+        esp_println::logger::init_logger_from_env();
+        log::info!("Hello, log!"); // Prints via esp-println to rtt
+        assert!(true)
+    }
+
+    #[test]
+    #[cfg(feature="defmt")]
+    fn defmt() {
+        use defmt_rtt as _;
+        defmt::info!("Hello, defmt!"); // Prints via defmt-rtt to rtt
         assert!(true)
     }
 
     #[test]
     #[cfg(abc)]
-    fn it_works2() {
+    fn it_works_disabled() {
         assert!(false)
     }
 
     #[test]
     #[ignore]
     #[cfg(not(abc))]
-    fn it_works3() {
+    fn it_works_ignored() {
         assert!(false)
     }
 
     #[test]
-    #[should_error]
     #[cfg(not(abc))]
-    fn it_works4() {
+    fn it_works() {
         assert!(false)
     }
 }
