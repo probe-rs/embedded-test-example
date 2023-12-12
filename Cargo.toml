@@ -19,8 +19,10 @@ defmt = { version = "0.3.5", optional = true }
 defmt-rtt = { version = "0.4.0", optional = true }
 
 [dev-dependencies]
-embedded-test = {git="https://github.com/probe-rs/embedded-test"}
+embedded-test = {version="0.2.0", features = ["embassy"]}
 panic-probe = {git = "https://github.com/t-moe/defmt", features = ["print-rtt"]}  # the upstream create does not support riscv yet
+
+embassy-executor = { default-features = false, version="0.4.0", features = ["executor-thread", "arch-riscv32"] }
 
 [features]
 default = ["log"]

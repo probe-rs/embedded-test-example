@@ -188,6 +188,29 @@ dependencies = [
 ]
 
 [[package]]
+name = "embassy-executor"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "94598b92a396f27bd34a4ce2648c35d5fec7c7157c1a4e3160167ca39c3e116c"
+dependencies = [
+ "critical-section",
+ "embassy-executor-macros",
+ "portable-atomic",
+]
+
+[[package]]
+name = "embassy-executor-macros"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0ab0f725ba52827eb44be22c85c52614c7402045968b26349de7f9df8421f74f"
+dependencies = [
+ "darling",
+ "proc-macro2",
+ "quote",
+ "syn 2.0.39",
+]
+
+[[package]]
 name = "embedded-dma"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -214,9 +237,10 @@ checksum = "edd0f118536f44f5ccd48bcb8b111bdc3de888b58c74639dfb034a357d0f206d"
 
 [[package]]
 name = "embedded-test"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "defmt",
+ "embassy-executor",
  "embedded-test-macros",
  "heapless 0.8.0",
  "log",
@@ -231,6 +255,7 @@ version = "0.1.0"
 dependencies = [
  "defmt",
  "defmt-rtt",
+ "embassy-executor",
  "embedded-test",
  "esp-println",
  "esp32c6-hal",
@@ -240,7 +265,7 @@ dependencies = [
 
 [[package]]
 name = "embedded-test-macros"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -515,6 +540,12 @@ name = "paste"
 version = "1.0.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "de3145af08024dea9fa9914f381a17b8fc6034dfb00f3a84013f7ff43f29ed4c"
+
+[[package]]
+name = "portable-atomic"
+version = "1.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7170ef9988bc169ba16dd36a7fa041e5c4cbeb6a35b76d4c03daded371eae7c0"
 
 [[package]]
 name = "proc-macro-crate"
