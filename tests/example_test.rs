@@ -70,10 +70,10 @@ mod unit_tests {
         assert!(false)
     }
 
-    // A test that fails with a returned Err()
+    // A test that fails with a returned Err(&str)
     #[test]
-    fn it_fails2() -> Result<(), ()> {
-        Err(())
+    fn it_fails2() -> Result<(), &'static str> {
+        Err("It failed because ...")
     }
 
     // Tests can be annotated with #[should_panic] if they are expected to panic
@@ -92,6 +92,6 @@ mod unit_tests {
     #[test]
     #[timeout(10)]
     fn it_timeouts() {
-        loop {} // should run into the 60s timeout
+        loop {} // should run into the 10s timeout
     }
 }
