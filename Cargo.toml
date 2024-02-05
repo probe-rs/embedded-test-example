@@ -19,13 +19,17 @@ defmt = { version = "0.3.5", optional = true }
 defmt-rtt = { version = "0.4.0", optional = true }
 
 [dev-dependencies]
-embedded-test = {version="0.2.2", features = ["embassy"]}
+embedded-test = {version="0.3.0", features = ["embassy"]}
 
+embassy-executor = { default-features = false, version="0.5.0", features = ["executor-thread", "arch-riscv32"] }
+# Note: You need to enable at least one executor feature on embassy 0.5.x
+
+# You need a panic handler that invokes `semihosting::process::abort()` on exit.
+# For example: Use the patched panic-probe:
 panic-probe = {git = "https://github.com/t-moe/defmt"}  # the upstream create does not use semihosting yet
-# Note: You need to provide your own exception handler, as panic_probe no longer provides this
-
-embassy-executor = { default-features = false, version="0.4.0", features = ["executor-thread", "arch-riscv32"] }
-# Note: You need to enable at least one executor feature on embassy
+# NOTE: When you use the patched panic-probe, you'll also need to:
+# * provide your own exception handler, as panic_probe no longer provides this
+# * patch defmt globally, as it is a native library (see below)
 
 [patch.crates-io] # Patch defmt globally, as it is a native library.
 defmt = { git = "https://github.com/t-moe/defmt" }
