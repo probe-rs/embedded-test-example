@@ -8,20 +8,24 @@ license = "MIT OR Apache-2.0"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-esp32c6-hal = { version="0.6.0" }
+cortex-m = "0.7"
+cortex-m-rt = "0.7"
 
 # dependencies when using the log feature
-esp-println = { version="0.7.1", features = ["log", "rtt", "esp32c6", "colors"], default-features = false, optional = true}
 log = { version = "0.4.20", optional = true}
 
 # dependencies when using the demft feature
 defmt = { version = "0.3.5", optional = true }
 defmt-rtt = { version = "0.4.0", optional = true }
 
+[dependencies.stm32f4xx-hal]
+version = "0.20.0"
+features = ["stm32f411"] # replace the model of your microcontroller here
+
 [dev-dependencies]
 embedded-test = {version="0.3.0", features = ["embassy"]}
 
-embassy-executor = { default-features = false, version="0.5.0", features = ["executor-thread", "arch-riscv32"] }
+embassy-executor = { default-features = false, version="0.5.0", features = ["executor-thread", "arch-cortex-m"] }
 # Note: You need to enable at least one executor feature on embassy 0.5.x
 
 # You need a panic handler that invokes `semihosting::process::abort()` on exit.
@@ -36,10 +40,10 @@ defmt = { git = "https://github.com/t-moe/defmt" }
 defmt-rtt = { git = "https://github.com/t-moe/defmt" }
 
 [features]
-default = ["log"]
-log = ["dep:esp-println", "dep:log", "embedded-test/log", "panic-probe/print-rtt"]
+default = ["defmt"]
+log = ["dep:log", "embedded-test/log", "panic-probe/print-rtt"]
 defmt = ["dep:defmt-rtt", "dep:defmt", "embedded-test/defmt", "panic-probe/print-defmt"]
-# Note: You must adapt .cargo/config when enabling the defmt feature
+# Note: You must adapt .cargo/config when disabling the defmt feature
 
 [[test]]
 name = "example_test"

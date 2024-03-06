@@ -6,30 +6,22 @@
 mod unit_tests {
 
     // import hal which provides exception handler
-    use esp32c6_hal::{clock::ClockControl, peripherals::Peripherals, prelude::*, IO};
+    use stm32f4xx_hal::{pac, pac::Peripherals};
 
     use panic_probe as _; // calls semihosting::process::abort on test failure, printing is done by probe-rs
 
     // Optional: A init function which is called before every test
     // asyncness is optional and needs feature embassy
     #[init]
-    async fn init() -> IO {
-        let peripherals = Peripherals::take();
-        let system = peripherals.SYSTEM.split();
-        ClockControl::boot_defaults(system.clock_control).freeze();
-        let io = IO::new(peripherals.GPIO, peripherals.IO_MUX);
-
-        #[cfg(feature = "log")]
-        esp_println::logger::init_logger_from_env();
-
-        // The init function can return some state, which can be consumed by the testcases
-        io
+    async fn init() -> Peripherals {
+        let p = pac::Peripherals::take().unwrap();
+        p
     }
 
     // A test which takes the state returned by the init function (optional)
     // asyncness is optional and needs feature embassy
     #[test]
-    async fn takes_state(_state: IO) {
+    async fn takes_state(_state: Peripherals) {
         assert!(true)
     }
 

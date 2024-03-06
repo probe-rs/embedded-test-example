@@ -1,21 +1,29 @@
 [env]
-ESP_LOGLEVEL="debug"
 DEFMT_LOG="debug"
 
 [build]
-target = "riscv32imac-unknown-none-elf"
+target = "thumbv7em-none-eabihf"
 
-[target.riscv32imac-unknown-none-elf]
+[target.thumbv7em-none-eabihf]
 
 # Syntax is: probe-rs test <flash settings> -- <elf> <libtest args>
-runner = "probe-rs test --chip esp32c6 -- "
+runner = "probe-rs test --chip STM32F411CEUx -- "
 
 rustflags = [
-    "-C", "link-arg=-Tlinkall.x",
+    # LLD (shipped with the Rust toolchain) is used as the default linker
+    "-C", "link-arg=-Tlink.x",
+    "-C", "link-arg=-Tdefmt.x",
 
-    #"-C", "link-arg=-Tdefmt.x", #// Uncomment this line when using defmt
+    # "-C", "link-arg=-Tstlog.x",
 
-    # Required to obtain backtraces (e.g. when using the "esp-backtrace" crate.)
-    # NOTE: May negatively impact performance of produced code
-    "-C", "force-frame-pointers",
+    # if you run into problems with LLD switch to the GNU linker by commenting out
+    # this line
+    # "-C", "linker=arm-none-eabi-ld",
+
+    # if you need to link to pre-compiled C libraries provided by a C toolchain
+    # use GCC as the linker by commenting out both lines above and then
+    # uncommenting the three lines below
+    # "-C", "linker=arm-none-eabi-gcc",
+    # "-C", "link-arg=-Wl,-Tlink.x",
+    # "-C", "link-arg=-nostartfiles",
 ]
