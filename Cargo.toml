@@ -8,39 +8,39 @@ license = "MIT OR Apache-2.0"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-esp32c6-hal = { version="0.6.0" }
+esp-hal = { version = "0.16.1", features = ["esp32c6"] }
+
 
 # dependencies when using the log feature
-esp-println = { version="0.7.1", features = ["log", "rtt", "esp32c6", "colors"], default-features = false, optional = true}
-log = { version = "0.4.20", optional = true}
+log = { version = "0.4.20", optional = true }
 
 # dependencies when using the demft feature
-defmt = { version = "0.3.5", optional = true }
+# Note: You must adapt .cargo/config when enabling the defmt feature
+defmt = { version = "0.3.6", optional = true }
 defmt-rtt = { version = "0.4.0", optional = true }
 
-[dev-dependencies]
-embedded-test = {version="0.3.0", features = ["embassy"]}
-
-embassy-executor = { default-features = false, version="0.5.0", features = ["executor-thread", "arch-riscv32"] }
+# dependencies when using the embassy feature
 # Note: You need to enable at least one executor feature on embassy 0.5.x
+embassy-executor = { default-features = false, version = "0.5.0", features = ["executor-thread", "arch-riscv32"], optional = true }
 
-# You need a panic handler that invokes `semihosting::process::abort()` on exit.
-# For example: Use the patched panic-probe:
-panic-probe = {git = "https://github.com/t-moe/defmt"}  # the upstream create does not use semihosting yet
-# NOTE: When you use the patched panic-probe, you'll also need to:
-# * provide your own exception handler, as panic_probe no longer provides this
-# * patch defmt globally, as it is a native library (see below)
 
-[patch.crates-io] # Patch defmt globally, as it is a native library.
-defmt = { git = "https://github.com/t-moe/defmt" }
-defmt-rtt = { git = "https://github.com/t-moe/defmt" }
+[dev-dependencies]
+embedded-test = { git = "https://github.com/probe-rs/embedded-test", branch = "next" }
+
 
 [features]
 default = ["log"]
-log = ["dep:esp-println", "dep:log", "embedded-test/log", "panic-probe/print-rtt"]
-defmt = ["dep:defmt-rtt", "dep:defmt", "embedded-test/defmt", "panic-probe/print-defmt"]
-# Note: You must adapt .cargo/config when enabling the defmt feature
+embassy = ["dep:embassy-executor", "embedded-test/embassy"]
+log = ["dep:log", "embedded-test/log", "embedded-test/init-log"]
+defmt = ["dep:defmt", "dep:defmt-rtt", "embedded-test/defmt"]
+
 
 [[test]]
 name = "example_test"
+harness = false
+
+
+[[test]]
+name = "async_test"
+required-features = ["embassy"]
 harness = false

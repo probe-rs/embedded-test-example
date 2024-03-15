@@ -8,8 +8,9 @@ mod unit_tests {
     use esp_hal::{clock::ClockControl, peripherals::Peripherals, prelude::*, IO};
 
     // Optional: A init function which is called before every test
+    // asyncness of init fn is optional
     #[init]
-    fn init() -> IO {
+    async fn init() -> IO {
         let peripherals = Peripherals::take();
         let system = peripherals.SYSTEM.split();
         ClockControl::boot_defaults(system.clock_control).freeze();
@@ -20,8 +21,9 @@ mod unit_tests {
     }
 
     // A test which takes the state returned by the init function (optional)
+    // asyncness of test fn's is optional
     #[test]
-    fn takes_state(_state: IO) {
+    async fn takes_state(_state: IO) {
         assert!(true)
     }
 

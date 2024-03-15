@@ -1,18 +1,17 @@
 [env]
-ESP_LOGLEVEL="debug"
-DEFMT_LOG="debug"
+ESP_LOGLEVEL = "debug"
+DEFMT_LOG = "debug"
+RUST_LOG = "info"
 
 [build]
 target = "riscv32imac-unknown-none-elf"
 
 [target.riscv32imac-unknown-none-elf]
 
-# Syntax is: probe-rs test <flash settings> -- <elf> <libtest args>
-runner = "probe-rs test --chip esp32c6 -- "
+runner = "probe-rs run --chip esp32c6"
 
 rustflags = [
     "-C", "link-arg=-Tlinkall.x",
-
     #"-C", "link-arg=-Tdefmt.x", #// Uncomment this line when using defmt
 
     # Required to obtain backtraces (e.g. when using the "esp-backtrace" crate.)
