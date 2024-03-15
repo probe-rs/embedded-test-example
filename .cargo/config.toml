@@ -12,6 +12,7 @@ runner = "probe-rs run --chip esp32c6"
 
 rustflags = [
     "-C", "link-arg=-Tlinkall.x",
+    "-C", "link-arg=-Tembedded-test.x",
     #"-C", "link-arg=-Tdefmt.x", #// Uncomment this line when using defmt
 
     # Required to obtain backtraces (e.g. when using the "esp-backtrace" crate.)
