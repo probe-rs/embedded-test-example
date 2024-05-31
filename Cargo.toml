@@ -8,31 +8,42 @@ license = "MIT OR Apache-2.0"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-esp-hal = { version = "0.16.1", features = ["esp32c6"] }
-
-
 # dependencies when using the log feature
 log = { version = "0.4.20", optional = true }
 
 # dependencies when using the demft feature
 # Note: You must adapt .cargo/config when enabling the defmt feature
-defmt = { version = "0.3.6", optional = true }
-defmt-rtt = { version = "0.4.0", optional = true }
+defmt = { version = "0.3.8", optional = true }
+defmt-rtt = { version = "0.4.1", optional = true }
 
 # dependencies when using the embassy feature
 # Note: You need to enable at least one executor feature on embassy 0.5.x
 embassy-executor = { default-features = false, version = "0.5.0", features = ["executor-thread", "arch-riscv32"], optional = true }
 
+# Esp32 related dependencies for main.rs. Note: embedded-test comes with its own panic handler and logging sink.
+esp-hal = { version = "0.17.0", features = ["esp32c6"] }
+esp-backtrace = { version = "0.11.0", features = [
+    "esp32c6",
+    "exception-handler",
+    "panic-handler",
+    "println",
+] }
+esp-println = { version = "0.9.0", default-features = false, features = ["esp32c6", "log", "jtag-serial", "colors"] }
+
 
 [dev-dependencies]
-embedded-test = { git = "https://github.com/probe-rs/embedded-test", branch = "next" }
-
+embedded-test = { version = "0.4.0" }
 
 [features]
 default = ["log"]
 embassy = ["dep:embassy-executor", "embedded-test/embassy"]
-log = ["dep:log", "embedded-test/log", "embedded-test/init-log"]
-defmt = ["dep:defmt", "dep:defmt-rtt", "embedded-test/defmt"]
+log = ["dep:log", "embedded-test/init-log"]
+defmt = ["dep:defmt", "dep:defmt-rtt"]
+
+[[bin]]
+name = "embedded-test-example"
+required-features = ["log"]
+test = false
 
 
 [[test]]

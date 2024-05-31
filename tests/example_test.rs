@@ -3,25 +3,24 @@
 
 #[cfg(test)]
 #[embedded_test::tests]
-mod unit_tests {
-    // import hal which provides exception handler
-    use esp_hal::{clock::ClockControl, peripherals::Peripherals, prelude::*, IO};
+mod tests {
+    use esp_hal::{clock::ClockControl, delay::Delay, peripherals::Peripherals, prelude::*};
 
     // Optional: A init function which is called before every test
     #[init]
-    fn init() -> IO {
+    fn init() -> Delay {
         let peripherals = Peripherals::take();
         let system = peripherals.SYSTEM.split();
-        ClockControl::boot_defaults(system.clock_control).freeze();
-        let io = IO::new(peripherals.GPIO, peripherals.IO_MUX);
+        let clocks = ClockControl::max(system.clock_control).freeze();
+        let delay = Delay::new(&clocks);
 
         // The init function can return some state, which can be consumed by the testcases
-        io
+        delay
     }
 
     // A test which takes the state returned by the init function (optional)
     #[test]
-    fn takes_state(_state: IO) {
+    fn takes_state(_state: Delay) {
         assert!(true)
     }
 
