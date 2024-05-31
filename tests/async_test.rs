@@ -4,11 +4,13 @@
 #[cfg(test)]
 #[embedded_test::tests]
 mod tests {
+    // import hal which provides exception handler
     use esp_hal::{clock::ClockControl, delay::Delay, peripherals::Peripherals, prelude::*};
 
     // Optional: A init function which is called before every test
+    // asyncness of init fn is optional
     #[init]
-    fn init() -> Delay {
+    async fn init() -> Delay {
         let peripherals = Peripherals::take();
         let system = peripherals.SYSTEM.split();
         let clocks = ClockControl::max(system.clock_control).freeze();
@@ -19,8 +21,9 @@ mod tests {
     }
 
     // A test which takes the state returned by the init function (optional)
+    // asyncness of test fn's is optional
     #[test]
-    fn takes_state(_state: Delay) {
+    async fn takes_state(_state: Delay) {
         assert!(true)
     }
 
